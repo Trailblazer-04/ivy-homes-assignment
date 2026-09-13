@@ -1,0 +1,8 @@
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { apiRequest, authHeaders } from '../../api/client.js';
+import { formatArea, formatMoney } from '../../shared/formatters.js';
+import { getPropertyImage } from '../../shared/propertyImages.js';
+import { getSession } from '../../shared/session.js';
+
+export function ListingDetailPage() { const session = getSession(); const { id } = useParams(); const [item, setItem] = useState(null); useEffect(() => { apiRequest(`/v1/listings/${id}`, { headers: authHeaders(session) }).then(setItem); }, [id]); if (!item) return <div className="loading">Loading home...</div>; return <section className="content detail"><Link className="back" to="/">← Back to discovery</Link><div className="detail-hero"><div className="large-image" style={{ '--property-image': `url(${getPropertyImage(item.listing_id)})` }} role="img" aria-label={`${item.apartment_name} property photo`}><span>{item.property_type}</span></div><div className="detail-copy"><span className="tag">{item.is_verified ? 'Verified listing' : 'Community listing'}</span><p className="eyebrow">{item.locality}</p><h1>{item.apartment_name}</h1><p className="lead">{item.description}</p><strong className="price">{formatMoney(item.price)}</strong><div className="facts"><span><b>{item.bedroom}</b> bedrooms</span><span><b>{formatArea(item.carpet_area)}</b> carpet</span><span><b>{item.bathroom}</b> bathrooms</span></div><a className="primary contact" href={`tel:${item.posted_by_contact}`}>Contact {item.posted_by_name} <span>↗</span></a></div></div></section>; }

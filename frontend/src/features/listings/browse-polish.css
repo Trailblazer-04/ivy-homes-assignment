@@ -1,0 +1,6 @@
+.filter-error { margin: -18px 0 24px; }
+.clear-filters { padding: 0 6px; background: transparent; color: #68776e; font-size: 12px; text-decoration: underline; }
+.empty-state { max-width: 520px; margin: 56px auto 20px; padding: 44px 30px; border-top: 2px solid #819b83; text-align: center; }
+.empty-state > span { color: #789078; font-size: 24px; }
+.empty-state h2 { margin: 16px 0 8px; font-size: 24px; letter-spacing: -1px; }
+.empty-state p { margin: 0 0 22px; color: #718078; font-size: 13px; }

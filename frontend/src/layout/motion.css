@@ -1,0 +1,80 @@
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-panel {
+  animation: slideInLeft 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-art {
+  animation: slideInRight 750ms 80ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.art-copy {
+  animation: slideInUp 700ms 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.content {
+  animation: slideInUp 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.listing-card,
+.project-card,
+.stat {
+  animation: slideInUp 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.listing-card:nth-child(2),
+.project-card:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.listing-card:nth-child(3),
+.project-card:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+.listing-card:nth-child(4),
+.project-card:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}

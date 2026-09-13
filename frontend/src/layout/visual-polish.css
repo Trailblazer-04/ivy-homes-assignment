@@ -1,0 +1,42 @@
+.image-placeholder,
+.large-image {
+  background: #b9c6b8;
+  isolation: isolate;
+}
+
+.image-placeholder::before,
+.large-image::before {
+  background: linear-gradient(180deg, rgba(17, 34, 27, 0.02) 35%, rgba(17, 34, 27, 0.58) 100%), var(--property-image);
+  background-position: center;
+  background-size: cover;
+  transition: transform 500ms ease;
+  z-index: -1;
+}
+
+.listing-card {
+  overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px rgba(28, 40, 36, 0.1);
+}
+
+.listing-card:hover .image-placeholder::before,
+.detail-hero:hover .large-image::before {
+  transform: scale(1.045);
+}
+
+.listing-card h3,
+.listing-card .card-bottom a {
+  transition: color 180ms ease;
+}
+
+.listing-card:hover h3 {
+  color: #66845f;
+}
+
+.card-bottom a:hover {
+  color: #1c2824;
+}

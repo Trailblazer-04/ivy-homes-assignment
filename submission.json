@@ -1,0 +1,32 @@
+{
+  "api_key": "IVY26-B96DB0E4A23D",
+  "candidate": { "name": "Rajat Bagaddeo", "email": "rajat.20235063@mnnit.ac.in", "repo_url": "", "demo_url": "" },
+  "answers": {
+    "total_listing_records": 4700,
+    "unique_properties": 4699,
+    "active_listings": 3722,
+    "corrupt_listing_ids": ["100-1002346", "100-1002884", "DWE-1001165", "DWE-1001183", "DWE-1001909", "MAG-1000179", "MAG-1000885", "MAG-1003269", "MAG-1003510", "SQU-1000979", "SQU-1002843", "ZER-1001207", "ZER-1001249", "ZER-1001334", "ZER-1002632", "ZER-1002911"],
+    "total_monthly_rent": 6626200,
+    "avg_price_per_sqft_2bhk": 20975.51,
+    "costliest_project": { "project_id": "P10068", "price_max_inr": 998000000 },
+    "listings_last_7_days": 149,
+    "fake_listing_ids": ["SQU-1002491"],
+    "projects_with_wrong_listing_count": 394,
+    "dataset_audit_ref": ""
+  },
+  "findings": [
+    { "endpoint": "*", "category": "auth", "documented": "Send the API key as the api_key query parameter.", "actual": "The live API requires the X-API-Key request header.", "how_found": "Authenticated the documented query-parameter request and read the useful 401 response, then retried with the header.", "impact": "Requests using only the documented query parameter are rejected.", "evidence": [] },
+    { "endpoint": "/auth/login", "category": "auth", "documented": "Returns token, token_type, expires_in=86400, and user.name.", "actual": "Returns access_token, refresh_token, token_type, expires_in=900, and user.email.", "how_found": "Called the live login endpoint with a valid demo account.", "impact": "The backend must retain and refresh the access token instead of assuming a 24-hour token.", "evidence": [] },
+    { "endpoint": "*", "category": "pagination", "documented": "Collections use page/page_size and a maximum limit of 200.", "actual": "Collections use offset/count/has_more; the service returns limit=50 when 200 is requested.", "how_found": "Compared collection metadata across limit and offset requests.", "impact": "Clients must follow offset and has_more rather than page arithmetic.", "evidence": [] },
+    { "endpoint": "/v1/listings", "category": "completeness", "documented": "Returns active listings only.", "actual": "The collection includes records with is_live=false.", "how_found": "Paged the complete listing collection and inspected is_live values.", "impact": "The frontend cannot assume every returned record is safe to show as active.", "evidence": ["100-1003403"] },
+    { "endpoint": "/v1/listing/{id}", "category": "missing_endpoint", "documented": "A single listing is served at the singular /v1/listing/{listing_id} path.", "actual": "That documented path returns 404.", "how_found": "Requested the documented detail path for a real listing.", "impact": "The documented detail URL cannot be used.", "evidence": [] },
+    { "endpoint": "/v1/listings/{id}", "category": "undocumented_endpoint", "documented": "Not listed at this plural detail path.", "actual": "The live API serves a single listing at /v1/listings/{id}.", "how_found": "Retried the detail request with the plural path after the documented path returned 404.", "impact": "The frontend must use the live plural path.", "evidence": ["MAG-1002627"] },
+    { "endpoint": "/v1/favourites", "category": "missing_endpoint", "documented": "Saved listings are managed through /v1/favourites.", "actual": "The documented favourites path returns 404.", "how_found": "Called the documented list, create, and delete resource paths.", "impact": "The documented saved-listing flow is unusable.", "evidence": [] },
+    { "endpoint": "/v1/saved", "category": "undocumented_endpoint", "documented": "Not documented.", "actual": "Saved listings are served at /v1/saved and mutations require listing_id.", "how_found": "Probed the live service after /v1/favourites returned 404.", "impact": "The frontend must use the undocumented resource and payload.", "evidence": ["MAG-1002627"] },
+    { "endpoint": "/v1/analytics/summary", "category": "missing_endpoint", "documented": "Returns city analytics summary.", "actual": "The live endpoint returns 404.", "how_found": "Requested the documented analytics endpoint with a valid session.", "impact": "Insights must be derived from live collections instead.", "evidence": [] },
+    { "endpoint": "/v1/projects", "category": "units", "documented": "price_min and price_max are integer rupees.", "actual": "Project prices are decimal crore-like values, such as 1.04 and 2.95.", "how_found": "Inspected project records while computing the costliest project.", "impact": "Values must be converted to rupees before display or comparison.", "evidence": ["P10001", "P10002"] },
+    { "endpoint": "/v1/projects", "category": "consistency", "documented": "total_listings always agrees with listings for the project.", "actual": "394 projects have a reported count different from the paged listing count.", "how_found": "Grouped all listing records by project_id and compared counts.", "impact": "Project listing counts cannot be trusted without recomputation.", "evidence": ["P10001", "P10002"] },
+    { "endpoint": "/v1/listings", "category": "data_quality", "documented": "Listing records describe possible properties.", "actual": "Some records have impossible values such as negative prices or floor greater than total_floors.", "how_found": "Validated numeric invariants over every retrievable listing.", "impact": "Corrupt records must be excluded from derived metrics.", "evidence": ["100-1002346", "100-1002884", "MAG-1000179", "MAG-1003269", "ZER-1001207"] },
+    { "endpoint": "/v1/listings", "category": "fraud", "documented": "Listings are genuine properties.", "actual": "At least one listing contains an explicit automated-enquiry injection and is not genuine.", "how_found": "Reviewed anomalous listing descriptions during the complete audit.", "impact": "The record must be excluded from trust-sensitive derived answers.", "evidence": ["SQU-1002491"] }
+  ]
+}

@@ -1,0 +1,6 @@
+import { useEffect, useState } from 'react';
+import { apiRequest, authHeaders } from '../../api/client.js';
+import { formatArea } from '../../shared/formatters.js';
+import { getSession } from '../../shared/session.js';
+
+export function ProjectsPage() { const session = getSession(); const [data, setData] = useState({ results: [], total: 0 }); useEffect(() => { apiRequest('/v1/projects?limit=24', { headers: authHeaders(session) }).then(setData); }, []); return <section className="content"><header className="page-header"><div><p className="eyebrow">Built for tomorrow</p><h1>Projects worth knowing.</h1><p className="muted">{data.total.toLocaleString('en-IN')} developments across Bangalore</p></div></header><div className="project-grid">{data.results.map((project) => <article className="project-card" key={project.project_id}><div className="project-visual"><span>{project.project_status}</span><b>{project.locality}</b></div><div><p className="eyebrow">{project.developer_name}</p><h2>{project.apartment_name}</h2><p className="muted">{formatArea(project.min_area_sqft)} – {formatArea(project.max_area_sqft)}</p><div className="project-meta"><strong>{project.price_min} – {project.price_max} Cr</strong><span>{project.total_listings} listings</span></div></div></article>)}</div></section>; }
