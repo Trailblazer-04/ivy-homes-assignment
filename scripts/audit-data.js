@@ -1,15 +1,15 @@
 import 'dotenv/config';
 import { writeFile } from 'node:fs/promises';
 
-const baseUrl = process.env.IVY_API_BASE_URL || 'https://solve.ivy.homes';
-const apiKey = process.env.IVY_API_KEY;
+const baseUrl = process.env.VITE_IVY_API_BASE_URL || 'https://solve.ivy.homes';
+const apiKey = process.env.VITE_IVY_API_KEY;
 const password = process.env.IVY_DEMO_PASSWORD || 'afe26fc9df';
 const email = process.env.IVY_DEMO_EMAIL || 'demo1@ivy.homes';
 const assignedLocality = (process.env.IVY_ASSIGNED_LOCALITY || 'electronic city').toLowerCase();
 const reference = new Date('2026-09-10T00:00:00+05:30');
 const weekStart = new Date(reference.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-if (!apiKey) throw new Error('IVY_API_KEY is required in .env');
+if (!apiKey) throw new Error('VITE_IVY_API_KEY is required in .env');
 
 async function request(path, options = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
