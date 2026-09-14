@@ -5,3 +5,96 @@
   height: 100vh;
   overflow-y: auto;
 }
+
+.sidebar-toggle,
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .app-shell {
+    position: relative;
+    display: block;
+  }
+
+  .app-shell > main {
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .app-shell > aside {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: min(280px, calc(100vw - 48px));
+    height: 100dvh;
+    overflow-y: auto;
+    transform: translateX(-105%);
+    transition: transform 220ms ease;
+  }
+
+  .app-shell > aside.open {
+    transform: translateX(0);
+  }
+
+  .app-shell > aside nav {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+    margin: 48px 0 0;
+    overflow: visible;
+  }
+
+  .app-shell > aside nav a {
+    display: flex !important;
+    justify-content: flex-start;
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 13px;
+    white-space: normal;
+  }
+
+  .app-shell > aside nav i {
+    width: 18px;
+    font-size: 18px;
+  }
+
+  .app-shell > aside .account {
+    display: grid;
+  }
+
+  .sidebar-toggle {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 30;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid #52645a;
+    border-radius: 4px;
+    background: #1c2824;
+    color: #d9f35e;
+    font-size: 23px;
+    line-height: 1;
+  }
+
+  .sidebar-toggle[aria-expanded='true'] {
+    left: calc(min(280px, calc(100vw - 48px)) - 58px);
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: block;
+    background: rgba(28, 40, 36, 0.48);
+  }
+
+  .app-shell > main .content {
+    padding-top: 80px;
+  }
+}

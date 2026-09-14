@@ -35,7 +35,7 @@ export function BrowsePage({ type = 'listings' }) {
   useEffect(() => { setFilters(emptyFilters); setAppliedFilters(emptyFilters); load(emptyFilters); }, [type]);
 
   const visibleHomes = useMemo(() => (data.results || []).filter((item) => priceMatches(item, appliedFilters)), [data.results, appliedFilters]);
-  const hasFilters = Object.values(appliedFilters).some(Boolean);
+  const hasFilters = Object.values(appliedFilters).some(Boolean) || Object.values(filters).some(Boolean);
 
   function updateFilter(name, value) { setFilters((currentFilters) => ({ ...currentFilters, [name]: value })); }
 
@@ -47,7 +47,7 @@ export function BrowsePage({ type = 'listings' }) {
     load(filters);
   }
 
-  function resetFilters() { setFilters(emptyFilters); setAppliedFilters(emptyFilters); load(emptyFilters); }
+  function resetFilters() { setFilters(emptyFilters); setAppliedFilters(emptyFilters); setError(''); load(emptyFilters); }
 
   return <section className="content"><header className="page-header"><div><p className="eyebrow">{type === 'listings' ? 'Curated for you' : 'Live market view'}</p><h1>{type === 'listings' ? 'Find your next chapter.' : 'Rentals'}</h1><p className="muted">{visibleHomes.length.toLocaleString('en-IN')} matching homes in Bangalore · updated just now</p></div><button className="filter-button" onClick={() => load()}>↻ Refresh</button></header><div className="filter-bar"><input placeholder="Locality" value={filters.locality} onChange={(event) => updateFilter('locality', event.target.value)} /><select value={filters.bedroom} onChange={(event) => updateFilter('bedroom', event.target.value)}><option value="">Bedrooms</option><option value="1">1 BHK</option><option value="2">2 BHK</option><option value="3">3 BHK</option><option value="4">4 BHK</option></select><select value={filters.furnishing} onChange={(event) => updateFilter('furnishing', event.target.value)}><option value="">Furnishing</option><option>unfurnished</option><option>semi-furnished</option><option>fully-furnished</option></select><input inputMode="numeric" type="number" min="0" placeholder="Min price" value={filters.min_price} onChange={(event) => updateFilter('min_price', event.target.value)} /><input inputMode="numeric" type="number" min="0" placeholder="Max price" value={filters.max_price} onChange={(event) => updateFilter('max_price', event.target.value)} /><button className="primary" onClick={applyFilters}>Apply filters</button>{hasFilters && <button className="clear-filters" onClick={resetFilters}>Reset filters</button>}</div>{error && <p className="error filter-error">{error}</p>}{loading && <div className="loading">Loading live homes...</div>}{!loading && !error && visibleHomes.length === 0 && <div className="empty-state"><span>⌂</span><h2>No homes match these filters.</h2><p>Try widening your price range or choosing a different locality.</p>{hasFilters && <button className="primary" onClick={resetFilters}>Show all homes</button>}</div>}{!loading && !error && visibleHomes.length > 0 && <div className="listing-grid">{visibleHomes.map((item) => <ListingCard item={item} saved={saved.some((savedItem) => savedItem.listing_id === item.listing_id)} onToggle={toggleSaved} key={item.listing_id} />)}</div>}</section>;
 }
