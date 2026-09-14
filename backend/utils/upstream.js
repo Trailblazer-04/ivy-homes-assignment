@@ -1,9 +1,10 @@
 export async function requestUpstream(path, options = {}) {
-  const response = await fetch(`${import.meta.env.VITE_IVY_API_BASE_URL}${path}`, {
+  const baseUrl = (process.env.IVY_API_BASE_URL || "https://solve.ivy.homes").replace(/\/$/, "");
+  const response = await fetch(`${baseUrl}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      "X-API-Key": import.meta.env.VITE_IVY_API_KEY,
+      "X-API-Key": process.env.IVY_API_KEY,
       ...(options.headers || {}),
     },
   });
