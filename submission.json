@@ -1,6 +1,6 @@
 {
   "api_key": "IVY26-B96DB0E4A23D",
-  "candidate": { "name": "Rajat Bagaddeo", "email": "rajat.20235063@mnnit.ac.in", "repo_url": "", "demo_url": "" },
+  "candidate": { "name": "Rajat Bagaddeo", "email": "rajat.20235063@mnnit.ac.in", "repo_url": "https://github.com/Trailblazer-04/ivy-homes-assignment", "demo_url": "https://ivy-homes-assignment-drab.vercel.app/" },
   "answers": {
     "total_listing_records": 4700,
     "unique_properties": 4699,
